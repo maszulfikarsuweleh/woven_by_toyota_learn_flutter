@@ -198,6 +198,12 @@ FieldResponse _$FieldResponseFromJson(Map<String, dynamic> json) =>
       innerBlocks: (json['innerBlocks'] as List<dynamic>?)
           ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
           .toList(),
+      cta: json['cta'] == null
+          ? null
+          : Cta.fromJson(json['cta'] as Map<String, dynamic>),
+      cardType: (json['cardType'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
@@ -227,16 +233,24 @@ Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
       'cards': instance.cards,
       'image': instance.image,
       'innerBlocks': instance.innerBlocks,
+      'cta': instance.cta,
+      'cardType': instance.cardType,
     };
 
 Card _$CardFromJson(Map<String, dynamic> json) => Card(
   fields: json['fields'] == null
       ? null
       : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
+  contentType: json['contentType'] as String?,
+  id: json['id'] as String?,
+  locale: json['locale'] as String?,
 );
 
 Map<String, dynamic> _$CardToJson(Card instance) => <String, dynamic>{
   'fields': instance.fields,
+  'contentType': instance.contentType,
+  'id': instance.id,
+  'locale': instance.locale,
 };
 
 Video _$VideoFromJson(Map<String, dynamic> json) => Video(
@@ -290,3 +304,73 @@ Map<String, dynamic> _$ImageToJson(Image instance) => <String, dynamic>{
   'height': instance.height,
   'fields': instance.fields,
 };
+
+Cta _$CtaFromJson(Map<String, dynamic> json) => Cta(
+  fields: json['fields'] == null
+      ? null
+      : CtaFields.fromJson(json['fields'] as Map<String, dynamic>),
+  contentType: json['contentType'] as String?,
+  id: json['id'] as String?,
+  locale: json['locale'] as String?,
+);
+
+Map<String, dynamic> _$CtaToJson(Cta instance) => <String, dynamic>{
+  'fields': instance.fields,
+  'contentType': instance.contentType,
+  'id': instance.id,
+  'locale': instance.locale,
+};
+
+CtaFields _$CtaFieldsFromJson(Map<String, dynamic> json) => CtaFields(
+  linkText: json['linkText'] as String?,
+  linkUrl: json['linkUrl'] as String?,
+  jumpToLink: json['jumpToLink'] as bool?,
+  ariaLabel: json['ariaLabel'] as String?,
+);
+
+Map<String, dynamic> _$CtaFieldsToJson(CtaFields instance) => <String, dynamic>{
+  'linkText': instance.linkText,
+  'linkUrl': instance.linkUrl,
+  'jumpToLink': instance.jumpToLink,
+  'ariaLabel': instance.ariaLabel,
+};
+
+FieldsImage _$FieldsImageFromJson(Map<String, dynamic> json) => FieldsImage(
+  fields: json['fields'] == null
+      ? null
+      : ImageFields.fromJson(json['fields'] as Map<String, dynamic>),
+  contentType: json['contentType'] as String?,
+  id: json['id'] as String?,
+  locale: json['locale'] as String?,
+);
+
+Map<String, dynamic> _$FieldsImageToJson(FieldsImage instance) =>
+    <String, dynamic>{
+      'fields': instance.fields,
+      'contentType': instance.contentType,
+      'id': instance.id,
+      'locale': instance.locale,
+    };
+
+ImageFields _$ImageFieldsFromJson(Map<String, dynamic> json) => ImageFields(
+  title: json['title'] as String?,
+  description: json['description'] as String?,
+  file: json['file'] == null
+      ? null
+      : FileClass.fromJson(json['file'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$ImageFieldsToJson(ImageFields instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'description': instance.description,
+      'file': instance.file,
+    };
+
+DetailsImage _$DetailsImageFromJson(Map<String, dynamic> json) => DetailsImage(
+  width: (json['width'] as num?)?.toInt(),
+  height: (json['height'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$DetailsImageToJson(DetailsImage instance) =>
+    <String, dynamic>{'width': instance.width, 'height': instance.height};

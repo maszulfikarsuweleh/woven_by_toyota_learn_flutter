@@ -160,31 +160,6 @@ class InnerBlock {
       _$InnerBlockFromJson(json);
 
   Map<String, dynamic> toJson() => _$InnerBlockToJson(this);
-
-  /// Polymorphic decode
-  static Object? _fromFieldsJson(Map<String, dynamic>? json) {
-    if (json == null) return null;
-    final type = json['contentType'] ?? '';
-
-    switch (type) {
-      case 'videoBlock':
-        return VideoBlockFields.fromJson(json);
-      case 'layoutBlock':
-        return LayoutBlockFields.fromJson(json);
-      case 'sectionBlock':
-        return SectionBlockFields.fromJson(json);
-      default:
-        return json; // fallback raw Map
-    }
-  }
-
-  static Map<String, dynamic>? _toFieldsJson(Object? object) {
-    if (object == null) return null;
-    if (object is VideoBlockFields) return object.toJson();
-    if (object is LayoutBlockFields) return object.toJson();
-    if (object is SectionBlockFields) return object.toJson();
-    return object as Map<String, dynamic>;
-  }
 }
 
 @JsonSerializable()
@@ -296,6 +271,8 @@ class FieldResponse {
         required this.cards,
         required this.image,
         required this.innerBlocks,
+        required this.cta,
+        required this.cardType,
     });
 
     final String? displayName;
@@ -323,6 +300,8 @@ class FieldResponse {
     final List<Card>? cards;
     final Image? image;
     final List<InnerBlock>? innerBlocks;
+    final Cta? cta;
+    final List<String>? cardType;
 
     factory FieldResponse.fromJson(Map<String, dynamic> json) => _$FieldResponseFromJson(json);
 
@@ -332,16 +311,23 @@ class FieldResponse {
 
 @JsonSerializable()
 class Card {
-  Card({
-    required this.fields
-  });
+    Card({
+        required this.fields,
+        required this.contentType,
+        required this.id,
+        required this.locale,
+    });
 
-  final FieldResponse? fields;
+    final FieldResponse? fields;
+    final String? contentType;
+    final String? id;
+    final String? locale;
 
-  factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
-  Map<String, dynamic> toJson() => _$CardToJson(this);
+    factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
+
+    Map<String, dynamic> toJson() => _$CardToJson(this);
+
 }
-
 @JsonSerializable()
 class Video {
   Video({
@@ -405,5 +391,98 @@ class Image {
     factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
 
     Map<String, dynamic> toJson() => _$ImageToJson(this);
+
+}
+
+@JsonSerializable()
+class Cta {
+    Cta({
+        required this.fields,
+        required this.contentType,
+        required this.id,
+        required this.locale,
+    });
+
+    final CtaFields? fields;
+    final String? contentType;
+    final String? id;
+    final String? locale;
+
+    factory Cta.fromJson(Map<String, dynamic> json) => _$CtaFromJson(json);
+
+    Map<String, dynamic> toJson() => _$CtaToJson(this);
+
+}
+
+@JsonSerializable()
+class CtaFields {
+    CtaFields({
+        required this.linkText,
+        required this.linkUrl,
+        required this.jumpToLink,
+        required this.ariaLabel,
+    });
+
+    final String? linkText;
+    final String? linkUrl;
+    final bool? jumpToLink;
+    final String? ariaLabel;
+
+    factory CtaFields.fromJson(Map<String, dynamic> json) => _$CtaFieldsFromJson(json);
+
+    Map<String, dynamic> toJson() => _$CtaFieldsToJson(this);
+
+}
+
+@JsonSerializable()
+class FieldsImage {
+    FieldsImage({
+        required this.fields,
+        required this.contentType,
+        required this.id,
+        required this.locale,
+    });
+
+    final ImageFields? fields;
+    final String? contentType;
+    final String? id;
+    final String? locale;
+
+    factory FieldsImage.fromJson(Map<String, dynamic> json) => _$FieldsImageFromJson(json);
+
+    Map<String, dynamic> toJson() => _$FieldsImageToJson(this);
+
+}
+
+@JsonSerializable()
+class ImageFields {
+    ImageFields({
+        required this.title,
+        required this.description,
+        required this.file,
+    });
+
+    final String? title;
+    final String? description;
+    final FileClass? file;
+
+    factory ImageFields.fromJson(Map<String, dynamic> json) => _$ImageFieldsFromJson(json);
+
+    Map<String, dynamic> toJson() => _$ImageFieldsToJson(this);
+
+}
+@JsonSerializable()
+class DetailsImage {
+    DetailsImage({
+        required this.width,
+        required this.height,
+    });
+
+    final int? width;
+    final int? height;
+
+    factory DetailsImage.fromJson(Map<String, dynamic> json) => _$DetailsImageFromJson(json);
+
+    Map<String, dynamic> toJson() => _$DetailsImageToJson(this);
 
 }

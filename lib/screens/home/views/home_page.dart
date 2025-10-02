@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woven_by_toyota/components/video_player/video_player.dart';
-import 'package:woven_by_toyota/data/home/model/home_response.dart';
+import 'package:woven_by_toyota/data/home/model/home_response.dart' hide Image;
 import 'package:woven_by_toyota/presentation/home/viewmodel/home_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -57,11 +57,13 @@ class _InnerBlockWidget extends StatelessWidget {
         } else if (block.contentType == "textIntro") {
           return _TextIntroWidget(fields: fields);
         } else if (block.contentType == "section") {
+          // return _CardBlockWidget(fields: fields);
           return _SectionBlockWidget(fields: fields);
         } else if (block.contentType == "cardGrid") {
           return _CardBlockWidget(fields: fields);
+        } else {
+          return const SizedBox.shrink();
         }
-
     }
 
     // fallback for unknown block type
@@ -129,32 +131,53 @@ class _CardBlockWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (fields.cards == null || fields.cards!.isEmpty) {
+      return Center(child: Text("No cards to display."));
+    } else { 
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: fields.cards!.map((card) {
+          return _ImageDescriptionWidget(fields: card.fields!);
+        }).toList(),
+      );
+    }
+  }
+}
+
+class _ImageDescriptionWidget extends StatelessWidget {
+  const _ImageDescriptionWidget({
+    super.key,
+    required this.fields,
+  });
+
+  final FieldResponse fields;
+
+  @override
+  Widget build(BuildContext context) {
  final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
-      color: Colors.teal,
+      color: Colors.brown,
       fontSize: 16,
     );
    return Column(
     children: [
-      if (fields.displayName != null) 
+      if (fields.image != null) 
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(fields.displayName!, style: style,
-            semanticsLabel: fields.image?.fields?.file?.url,
-          ),
+          child: Image.network("https:${fields.image?.fields?.file?.url}"),
         ),
         if (fields.title != null)
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(fields.title!, style: style.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Text(fields.title!, style: style,
             semanticsLabel: fields.title,
           ),
         ),
-        if (fields.description != null)
+      if (fields.text != null)
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(fields.description!, style: style.copyWith(fontSize: 14),
-            semanticsLabel: fields.description,
+          child: Text(fields.text!, style: style,
+            semanticsLabel: fields.text,
           ),
         ),
     ],
