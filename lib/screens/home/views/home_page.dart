@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
     final innerBlocks = viewModel.homeResponse?.pageProps.data.fields.innerBlocks;
-
+    final joinOurTeam = viewModel.homeResponse?.pageProps.data.fields.joinOurTeam;
     if (viewModel.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -33,11 +33,19 @@ class _HomePageState extends State<HomePage> {
       return const Center(child: Text("No items to display."));
     }
 
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: innerBlocks.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 16),
-      itemBuilder: (context, index) => _AnimatedInnerBlockWidget(block: innerBlocks[index]),
+    return SingleChildScrollView(
+        child: Column(
+        children: [ 
+           // The ListView section.
+            ListView.builder(
+              // The essential properties to prevent conflicts.
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: innerBlocks.length, // A manageable number of items.
+              itemBuilder: (context, index) => _AnimatedInnerBlockWidget(block: innerBlocks[index]),
+            ),
+            joinOurTeam != null ? _JoinOurTeamBlockWidget(fields: joinOurTeam) : const SizedBox.shrink(),
+        ])
     );
   }
 }
@@ -74,15 +82,80 @@ class _AnimatedInnerBlockWidget extends StatelessWidget {
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(0),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(0),
         child: child,
       ),
     );
   }
 }
+
+class _JoinOurTeamBlockWidget extends StatelessWidget {
+  final FieldResponse fields;
+
+  const _JoinOurTeamBlockWidget({super.key, required this.fields});
+
+  @override
+  Widget build(BuildContext context) {
+    if (fields.fields == null) return const SizedBox.shrink();
+    final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+          color: Colors.indigo[700],
+        );
+    final subtitleStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.redAccent);
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 16.0),
+            child: Text(fields.fields!.sectionTitle ?? "", style: subtitleStyle),
+          ),
+           Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (fields.fields?.backgroundImage?.fields?.file?.url != null) ...[
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        child: Image.network(
+                          "https:${fields.fields?.backgroundImage?.fields?.file?.url ?? ""}",
+                          height: 300,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        fields.fields!.titleText?? "",
+                        style: titleStyle,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        fields.fields!.description?? "",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.blueGrey[700],
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+          ]),
+    );
+  }
+  }
 
 class _NewsBlockWidget extends StatelessWidget {
   final FieldResponse fields;
@@ -93,53 +166,69 @@ class _NewsBlockWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (fields.newsPosts == null || fields.newsPosts!.isEmpty) return const SizedBox.shrink();
     final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
-          fontWeight: FontWeight.bold,
           color: Colors.indigo[700],
         );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 16.0),
-          child: Text(fields.heading ?? "", style: titleStyle),
-        ),
-        Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        children: fields.newsPosts!.map((news) {
-          final newsFields = news.fields;
-          if (newsFields == null) return const SizedBox.shrink();
-
-          return Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (newsFields.thumbnail != null)
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                      child: Image.network(
-                        "https:${newsFields.thumbnail?.fields?.file?.url ?? ""}",
-                        height: 120,
-                        fit: BoxFit.cover,
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 16.0),
+            child: Text(fields.heading ?? "", style: titleStyle),
+          ),
+          Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: fields.newsPosts!.map((news) {
+            final newsFields = news.fields;
+            if (newsFields == null) return const SizedBox.shrink();
+      
+            return Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (newsFields.thumbnail != null)
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        child: Image.network(
+                          "https:${newsFields.thumbnail?.fields?.file?.url ?? ""}",
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            newsFields.category ?? "",
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.redAccent,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            newsFields.pageTitle ?? "",
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.blueGrey[700],
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      newsFields.pageTitle ?? "",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            );
-        }).toList(),
-      )
-      ]       
+                  ],
+                ),
+              );
+          }).toList(),
+        )
+        ]       
+      ),
     );
   }
 }
@@ -190,7 +279,7 @@ class _CardBlockWidget extends StatelessWidget {
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                       child: Image.network(
                         "https:${cardFields.image?.fields?.file?.url}",
-                        height: 120,
+                        height: 200,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -198,7 +287,10 @@ class _CardBlockWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       cardFields.text ?? "",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.blueGrey[700],
+                          fontSize: 16,
+                        ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -221,7 +313,7 @@ class _SectionBlockWidget extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: Colors.indigo[700],
         );
-    final subtitleStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.indigo[400]);
+    final subtitleStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.redAccent);
 
     return Padding(
       padding: const EdgeInsets.all(16),

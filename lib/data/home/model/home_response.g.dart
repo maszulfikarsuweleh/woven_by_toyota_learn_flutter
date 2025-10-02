@@ -77,6 +77,9 @@ DataFields _$DataFieldsFromJson(Map<String, dynamic> json) => DataFields(
           ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
           .toList() ??
       [],
+  joinOurTeam: json['joinOurTeam'] == null
+      ? null
+      : FieldResponse.fromJson(json['joinOurTeam'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$DataFieldsToJson(DataFields instance) =>
@@ -84,6 +87,7 @@ Map<String, dynamic> _$DataFieldsToJson(DataFields instance) =>
       'pageTitle': instance.pageTitle,
       'slug': instance.slug,
       'innerBlocks': instance.innerBlocks.map((e) => e.toJson()).toList(),
+      'joinOurTeam': instance.joinOurTeam?.toJson(),
     };
 
 InnerBlock _$InnerBlockFromJson(Map<String, dynamic> json) => InnerBlock(
@@ -101,67 +105,76 @@ Map<String, dynamic> _$InnerBlockToJson(InnerBlock instance) =>
       'locale': instance.locale,
     };
 
-FieldResponse _$FieldResponseFromJson(Map<String, dynamic> json) =>
-    FieldResponse(
-      displayName: json['displayName'] as String?,
-      title: json['title'] as String?,
-      description: json['description'] as String?,
-      file: json['file'] == null
-          ? null
-          : FileClass.fromJson(json['file'] as Map<String, dynamic>),
-      theme: json['theme'] as String?,
-      id: json['id'] as String?,
-      locale: json['locale'] as String?,
-      layout: json['layout'] as String?,
-      colorBackground: (json['colorBackground'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      displayTitle: json['displayTitle'] as String?,
-      displayTitleWidth: json['displayTitleWidth'] as String?,
-      eyebrowText: json['eyebrowText'] as String?,
-      text: json['text'] as String?,
-      linkText: json['linkText'] as String?,
-      linkUrl: json['linkUrl'] as String?,
-      jumpToLink: json['jumpToLink'] as bool?,
-      ariaLabel: json['ariaLabel'] as String?,
-      pageTitle: json['pageTitle'] as String?,
-      publishDate: json['publishDate'] as String?,
-      category: json['category'] as String?,
-      topic: (json['topic'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      video: json['video'] == null
-          ? null
-          : Video.fromJson(json['video'] as Map<String, dynamic>),
-      cards: (json['cards'] as List<dynamic>?)
-          ?.map((e) => Card.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      image: json['image'] == null
-          ? null
-          : Image.fromJson(json['image'] as Map<String, dynamic>),
-      innerBlocks: (json['innerBlocks'] as List<dynamic>?)
-          ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      cta: json['cta'] == null
-          ? null
-          : Cta.fromJson(json['cta'] as Map<String, dynamic>),
-      cardType: (json['cardType'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      heading: json['heading'] as String?,
-      newsPosts: (json['newsPosts'] as List<dynamic>?)
-          ?.map((e) => FieldResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      fields: json['fields'] == null
-          ? null
-          : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
-      thumbnail: json['thumbnail'] == null
-          ? null
-          : Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>),
-    );
+FieldResponse _$FieldResponseFromJson(
+  Map<String, dynamic> json,
+) => FieldResponse(
+  displayName: json['displayName'] as String?,
+  title: json['title'] as String?,
+  description: json['description'] as String?,
+  file: json['file'] == null
+      ? null
+      : FileClass.fromJson(json['file'] as Map<String, dynamic>),
+  theme: json['theme'] as String?,
+  id: json['id'] as String?,
+  locale: json['locale'] as String?,
+  layout: json['layout'] as String?,
+  colorBackground: (json['colorBackground'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  displayTitle: json['displayTitle'] as String?,
+  displayTitleWidth: json['displayTitleWidth'] as String?,
+  eyebrowText: json['eyebrowText'] as String?,
+  text: json['text'] as String?,
+  linkText: json['linkText'] as String?,
+  linkUrl: json['linkUrl'] as String?,
+  jumpToLink: json['jumpToLink'] as bool?,
+  ariaLabel: json['ariaLabel'] as String?,
+  pageTitle: json['pageTitle'] as String?,
+  publishDate: json['publishDate'] as String?,
+  category: json['category'] as String?,
+  topic: (json['topic'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  video: json['video'] == null
+      ? null
+      : Video.fromJson(json['video'] as Map<String, dynamic>),
+  cards: (json['cards'] as List<dynamic>?)
+      ?.map((e) => Card.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  image: json['image'] == null
+      ? null
+      : Image.fromJson(json['image'] as Map<String, dynamic>),
+  innerBlocks: (json['innerBlocks'] as List<dynamic>?)
+      ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  cta: json['cta'] == null
+      ? null
+      : Cta.fromJson(json['cta'] as Map<String, dynamic>),
+  cardType: (json['cardType'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  heading: json['heading'] as String?,
+  newsPosts: (json['newsPosts'] as List<dynamic>?)
+      ?.map((e) => FieldResponse.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  fields: json['fields'] == null
+      ? null
+      : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
+  thumbnail: json['thumbnail'] == null
+      ? null
+      : Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>),
+  name: json['name'] as String?,
+  sectionTitle: json['sectionTitle'] as String?,
+  titleText: json['titleText'] as String?,
+  backgroundImage: json['backgroundImage'] == null
+      ? null
+      : FieldResponse.fromJson(json['backgroundImage'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
     <String, dynamic>{
+      'backgroundImage': instance.backgroundImage,
+      'titleText': instance.titleText,
+      'sectionTitle': instance.sectionTitle,
+      'name': instance.name,
       'thumbnail': instance.thumbnail,
       'fields': instance.fields,
       'newsPosts': instance.newsPosts,

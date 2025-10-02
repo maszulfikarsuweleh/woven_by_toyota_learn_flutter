@@ -122,10 +122,13 @@ class DataFields {
   @JsonKey(defaultValue: [])
   final List<InnerBlock> innerBlocks;
 
+  final FieldResponse? joinOurTeam;
+
   DataFields({
     required this.pageTitle,
     required this.slug,
     required this.innerBlocks,
+    required this.joinOurTeam,
   });
 
   factory DataFields.fromJson(Map<String, dynamic> json) =>
@@ -196,8 +199,16 @@ class FieldResponse {
         required this.newsPosts,
         required this.fields,
         required this.thumbnail,
+        required this.name,
+        required this.sectionTitle,
+        required this.titleText,
+        required this.backgroundImage,
     });
 
+    final FieldResponse? backgroundImage;
+    final String? titleText;
+    final String? sectionTitle;
+    final String? name;
     final Thumbnail? thumbnail;
     final FieldResponse? fields;
     final List<FieldResponse>? newsPosts;
