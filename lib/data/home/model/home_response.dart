@@ -163,87 +163,6 @@ class InnerBlock {
 }
 
 @JsonSerializable()
-class VideoBlockFields {
-  @JsonKey(defaultValue: "")
-  final String displayName;
-
-  @JsonKey(defaultValue: "")
-  final String title;
-
-  @JsonKey(defaultValue: "")
-  final String theme;
-
-  VideoBlockFields({
-    required this.displayName,
-    required this.title,
-    required this.theme,
-  });
-
-  factory VideoBlockFields.fromJson(Map<String, dynamic> json) =>
-      _$VideoBlockFieldsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$VideoBlockFieldsToJson(this);
-}
-
-@JsonSerializable()
-class LayoutBlockFields {
-  @JsonKey(defaultValue: "")
-  final String layout;
-
-  @JsonKey(defaultValue: "")
-  final String description;
-
-  @JsonKey(defaultValue: "")
-  final String displayName;
-
-  LayoutBlockFields({
-    required this.layout,
-    required this.description,
-    required this.displayName,
-  });
-
-  factory LayoutBlockFields.fromJson(Map<String, dynamic> json) =>
-      _$LayoutBlockFieldsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LayoutBlockFieldsToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class SectionBlockFields {
-  @JsonKey(defaultValue: "")
-  final String title;
-
-  @JsonKey(defaultValue: [])
-  final List<String> colorBackground;
-
-  @JsonKey(defaultValue: "")
-  final String displayTitle;
-
-  @JsonKey(defaultValue: "")
-  final String displayTitleWidth;
-
-  @JsonKey(defaultValue: "")
-  final String eyebrowText;
-
-  @JsonKey(defaultValue: [])
-  final List<InnerBlock> innerBlocks;
-
-  SectionBlockFields({
-    required this.title,
-    required this.colorBackground,
-    required this.displayTitle,
-    required this.displayTitleWidth,
-    required this.eyebrowText,
-    required this.innerBlocks,
-  });
-
-  factory SectionBlockFields.fromJson(Map<String, dynamic> json) =>
-      _$SectionBlockFieldsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SectionBlockFieldsToJson(this);
-}
-
-@JsonSerializable()
 class FieldResponse {
     FieldResponse({
         required this.displayName,
@@ -273,8 +192,16 @@ class FieldResponse {
         required this.innerBlocks,
         required this.cta,
         required this.cardType,
+        required this.heading,
+        required this.newsPosts,
+        required this.fields,
+        required this.thumbnail,
     });
 
+    final Thumbnail? thumbnail;
+    final FieldResponse? fields;
+    final List<FieldResponse>? newsPosts;
+    final String? heading;
     final String? displayName;
     final String? title;
     final String? description;
@@ -306,6 +233,20 @@ class FieldResponse {
     factory FieldResponse.fromJson(Map<String, dynamic> json) => _$FieldResponseFromJson(json);
 
     Map<String, dynamic> toJson() => _$FieldResponseToJson(this);
+
+}
+
+@JsonSerializable()
+class Thumbnail {
+    Thumbnail({
+        required this.fields
+    });
+
+    final FieldResponse? fields;
+
+    factory Thumbnail.fromJson(Map<String, dynamic> json) => _$ThumbnailFromJson(json);
+
+    Map<String, dynamic> toJson() => _$ThumbnailToJson(this);
 
 }
 

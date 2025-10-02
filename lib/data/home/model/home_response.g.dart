@@ -101,62 +101,6 @@ Map<String, dynamic> _$InnerBlockToJson(InnerBlock instance) =>
       'locale': instance.locale,
     };
 
-VideoBlockFields _$VideoBlockFieldsFromJson(Map<String, dynamic> json) =>
-    VideoBlockFields(
-      displayName: json['displayName'] as String? ?? '',
-      title: json['title'] as String? ?? '',
-      theme: json['theme'] as String? ?? '',
-    );
-
-Map<String, dynamic> _$VideoBlockFieldsToJson(VideoBlockFields instance) =>
-    <String, dynamic>{
-      'displayName': instance.displayName,
-      'title': instance.title,
-      'theme': instance.theme,
-    };
-
-LayoutBlockFields _$LayoutBlockFieldsFromJson(Map<String, dynamic> json) =>
-    LayoutBlockFields(
-      layout: json['layout'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      displayName: json['displayName'] as String? ?? '',
-    );
-
-Map<String, dynamic> _$LayoutBlockFieldsToJson(LayoutBlockFields instance) =>
-    <String, dynamic>{
-      'layout': instance.layout,
-      'description': instance.description,
-      'displayName': instance.displayName,
-    };
-
-SectionBlockFields _$SectionBlockFieldsFromJson(Map<String, dynamic> json) =>
-    SectionBlockFields(
-      title: json['title'] as String? ?? '',
-      colorBackground:
-          (json['colorBackground'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
-      displayTitle: json['displayTitle'] as String? ?? '',
-      displayTitleWidth: json['displayTitleWidth'] as String? ?? '',
-      eyebrowText: json['eyebrowText'] as String? ?? '',
-      innerBlocks:
-          (json['innerBlocks'] as List<dynamic>?)
-              ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
-
-Map<String, dynamic> _$SectionBlockFieldsToJson(SectionBlockFields instance) =>
-    <String, dynamic>{
-      'title': instance.title,
-      'colorBackground': instance.colorBackground,
-      'displayTitle': instance.displayTitle,
-      'displayTitleWidth': instance.displayTitleWidth,
-      'eyebrowText': instance.eyebrowText,
-      'innerBlocks': instance.innerBlocks.map((e) => e.toJson()).toList(),
-    };
-
 FieldResponse _$FieldResponseFromJson(Map<String, dynamic> json) =>
     FieldResponse(
       displayName: json['displayName'] as String?,
@@ -204,10 +148,24 @@ FieldResponse _$FieldResponseFromJson(Map<String, dynamic> json) =>
       cardType: (json['cardType'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      heading: json['heading'] as String?,
+      newsPosts: (json['newsPosts'] as List<dynamic>?)
+          ?.map((e) => FieldResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      fields: json['fields'] == null
+          ? null
+          : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
+      thumbnail: json['thumbnail'] == null
+          ? null
+          : Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
     <String, dynamic>{
+      'thumbnail': instance.thumbnail,
+      'fields': instance.fields,
+      'newsPosts': instance.newsPosts,
+      'heading': instance.heading,
       'displayName': instance.displayName,
       'title': instance.title,
       'description': instance.description,
@@ -236,6 +194,16 @@ Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
       'cta': instance.cta,
       'cardType': instance.cardType,
     };
+
+Thumbnail _$ThumbnailFromJson(Map<String, dynamic> json) => Thumbnail(
+  fields: json['fields'] == null
+      ? null
+      : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$ThumbnailToJson(Thumbnail instance) => <String, dynamic>{
+  'fields': instance.fields,
+};
 
 Card _$CardFromJson(Map<String, dynamic> json) => Card(
   fields: json['fields'] == null

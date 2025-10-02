@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woven_by_toyota/components/video_player/video_player.dart';
-import 'package:woven_by_toyota/data/home/model/home_response.dart' hide Image;
+import 'package:woven_by_toyota/data/home/model/home_response.dart' hide Image, Card;
 import 'package:woven_by_toyota/presentation/home/viewmodel/home_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,220 +12,234 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-@override
-void initState() {
-  super.initState();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    Provider.of<HomeViewModel>(context, listen: false).loadHomeData();
-  });
-}
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<HomeViewModel>(context, listen: false).loadHomeData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
-    var isLoading = viewModel.isLoading;
-    var innerBlocks = viewModel.homeResponse?.pageProps.data.fields.innerBlocks;
-    // 1. Check if the list is null (loading state)
-    if (isLoading) {
+    final innerBlocks = viewModel.homeResponse?.pageProps.data.fields.innerBlocks;
+
+    if (viewModel.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    // 2. Check if the list is empty
+
     if (innerBlocks == null || innerBlocks.isEmpty) {
       return const Center(child: Text("No items to display."));
     }
-    return ListView.builder(
-        itemCount: innerBlocks.length,
-        itemBuilder: (context, index) {
-          return _InnerBlockWidget(block: innerBlocks[index]);
-        },
-      );
+
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: innerBlocks.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      itemBuilder: (context, index) => _AnimatedInnerBlockWidget(block: innerBlocks[index]),
+    );
   }
 }
 
-class _InnerBlockWidget extends StatelessWidget {
+class _AnimatedInnerBlockWidget extends StatelessWidget {
   final InnerBlock block;
 
-  const _InnerBlockWidget({super.key, required this.block});
+  const _AnimatedInnerBlockWidget({super.key, required this.block});
 
   @override
   Widget build(BuildContext context) {
     final fields = block.fields;
 
-    if (fields != null) {
-        if (block.contentType == "hero") {
-          var url = "https:${fields.video?.fields?.file?.url}";
-          return VideoPlayerScreen(videoUrl: url);
-        } else if (block.contentType == "textIntro") {
-          return _TextIntroWidget(fields: fields);
-        } else if (block.contentType == "section") {
-          // return _CardBlockWidget(fields: fields);
-          return _SectionBlockWidget(fields: fields);
-        } else if (block.contentType == "cardGrid") {
-          return _CardBlockWidget(fields: fields);
-        } else {
-          return const SizedBox.shrink();
-        }
+    if (fields == null) return const SizedBox.shrink();
+
+    Widget child;
+    print(  "Rendering block of type: ${block.contentType}" );
+    switch (block.contentType) {
+      case "hero":
+        child = VideoPlayerScreen(videoUrl: "https:${fields.video?.fields?.file?.url}");
+      case "textIntro":
+        child = _TextIntroWidget(fields: fields);
+      case "section":
+        child = _SectionBlockWidget(fields: fields);
+      case "cardGrid":
+        child = _CardBlockWidget(fields: fields);
+      case "featuredArticles":
+        child = _NewsBlockWidget(fields: fields);
+      default:
+        child = const SizedBox.shrink();
     }
 
-    // fallback for unknown block type
-    return const SizedBox.shrink();
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: child,
+      ),
+    );
   }
 }
 
-// ignore: unused_element
-class _InnerBlockComponent extends StatelessWidget {
-  const _InnerBlockComponent({
-    super.key,
-    required this.innerBlock,
-  });
+class _NewsBlockWidget extends StatelessWidget {
+  final FieldResponse fields;
 
-  final List<InnerBlock> innerBlock;
+  const _NewsBlockWidget({super.key, required this.fields});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-    return ListView.builder(
-      itemCount: innerBlock.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text("$index"),
+    if (fields.newsPosts == null || fields.newsPosts!.isEmpty) return const SizedBox.shrink();
+    final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Colors.indigo[700],
         );
-      },
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 16.0),
+          child: Text(fields.heading ?? "", style: titleStyle),
+        ),
+        Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        children: fields.newsPosts!.map((news) {
+          final newsFields = news.fields;
+          if (newsFields == null) return const SizedBox.shrink();
+
+          return Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (newsFields.thumbnail != null)
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.network(
+                        "https:${newsFields.thumbnail?.fields?.file?.url ?? ""}",
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      newsFields.pageTitle ?? "",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            );
+        }).toList(),
+      )
+      ]       
     );
   }
 }
 
 class _TextIntroWidget extends StatelessWidget {
-  const _TextIntroWidget({
-    super.key,
-    required this.fields,
-  });
-
   final FieldResponse fields;
+
+  const _TextIntroWidget({super.key, required this.fields});
 
   @override
   Widget build(BuildContext context) {
- final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: Colors.blueGrey,
-      fontSize: 14,
+    final style = Theme.of(context).textTheme.titleMedium!.copyWith(
+          color: Colors.blueGrey[700],
+          fontSize: 16,
+        );
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Text(fields.description ?? "", style: style, textAlign: TextAlign.center),
     );
-   return Padding(
-     padding: const EdgeInsets.all(8.0),
-     child: Text(fields.description ?? "", style: style,
-            semanticsLabel: fields.title
-            ),
-   );
   }
 }
 
 class _CardBlockWidget extends StatelessWidget {
-  const _CardBlockWidget({
-    super.key,
-    required this.fields,
-  });
-
   final FieldResponse fields;
+
+  const _CardBlockWidget({super.key, required this.fields});
 
   @override
   Widget build(BuildContext context) {
-    if (fields.cards == null || fields.cards!.isEmpty) {
-      return Center(child: Text("No cards to display."));
-    } else { 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    if (fields.cards == null || fields.cards!.isEmpty) return const SizedBox.shrink();
+
+    return Wrap(
+        spacing: 16,
+        runSpacing: 16,
         children: fields.cards!.map((card) {
-          return _ImageDescriptionWidget(fields: card.fields!);
+          final cardFields = card.fields;
+          if (cardFields == null) return const SizedBox.shrink();
+
+          return Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (cardFields.image != null)
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.network(
+                        "https:${cardFields.image?.fields?.file?.url}",
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      cardFields.text ?? "",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            );
         }).toList(),
       );
-    }
-  }
-}
-
-class _ImageDescriptionWidget extends StatelessWidget {
-  const _ImageDescriptionWidget({
-    super.key,
-    required this.fields,
-  });
-
-  final FieldResponse fields;
-
-  @override
-  Widget build(BuildContext context) {
- final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: Colors.brown,
-      fontSize: 16,
-    );
-   return Column(
-    children: [
-      if (fields.image != null) 
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.network("https:${fields.image?.fields?.file?.url}"),
-        ),
-        if (fields.title != null)
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(fields.title!, style: style,
-            semanticsLabel: fields.title,
-          ),
-        ),
-      if (fields.text != null)
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(fields.text!, style: style,
-            semanticsLabel: fields.text,
-          ),
-        ),
-    ],
-   );
   }
 }
 
 class _SectionBlockWidget extends StatelessWidget {
-  const _SectionBlockWidget({
-    super.key,
-    required this.fields,
-  });
-
   final FieldResponse fields;
+
+  const _SectionBlockWidget({super.key, required this.fields});
 
   @override
   Widget build(BuildContext context) {
- final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: Colors.indigo,
-      fontSize: 16,
+    final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Colors.indigo[700],
+        );
+    final subtitleStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.indigo[400]);
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (fields.eyebrowText != null) Text(fields.eyebrowText!, style: subtitleStyle),
+          if (fields.displayTitle != null) ...[
+            const SizedBox(height: 4),
+            Text(fields.displayTitle!, style: titleStyle),
+          ],
+          if (fields.innerBlocks != null && fields.innerBlocks!.isNotEmpty)
+            ...fields.innerBlocks!.map((block) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: _AnimatedInnerBlockWidget(block: block),
+                )),
+        ],
+      ),
     );
-   return Column(
-    children: [
-      if (fields.eyebrowText != null) 
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(fields.eyebrowText!, style: style,
-            semanticsLabel: fields.eyebrowText,
-          ),
-        ),
-        if (fields.displayTitle != null)
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(fields.displayTitle!, style: style.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-            semanticsLabel: fields.displayTitle,
-          ),
-        ),
-        if (fields.innerBlocks != null && fields.innerBlocks!.isNotEmpty)
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: fields.innerBlocks!.length,
-            itemBuilder: (context, index) {
-              return _InnerBlockWidget(block: fields.innerBlocks![index]);
-            },
-          ),
-    ],
-   );
   }
 }
