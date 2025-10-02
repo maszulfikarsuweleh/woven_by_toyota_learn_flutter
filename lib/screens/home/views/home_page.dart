@@ -35,16 +35,16 @@ void initState() {
     return ListView.builder(
         itemCount: innerBlocks.length,
         itemBuilder: (context, index) {
-          return InnerBlockWidget(block: innerBlocks[index]);
+          return _InnerBlockWidget(block: innerBlocks[index]);
         },
       );
   }
 }
 
-class InnerBlockWidget extends StatelessWidget {
+class _InnerBlockWidget extends StatelessWidget {
   final InnerBlock block;
 
-  const InnerBlockWidget({super.key, required this.block});
+  const _InnerBlockWidget({super.key, required this.block});
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +58,8 @@ class InnerBlockWidget extends StatelessWidget {
           return _TextIntroWidget(fields: fields);
         } else if (block.contentType == "section") {
           return _SectionBlockWidget(fields: fields);
+        } else if (block.contentType == "cardGrid") {
+          return _CardBlockWidget(fields: fields);
         }
 
     }
@@ -117,8 +119,8 @@ class _TextIntroWidget extends StatelessWidget {
   }
 }
 
-class _LayoutBlockWidget extends StatelessWidget {
-  const _LayoutBlockWidget({
+class _CardBlockWidget extends StatelessWidget {
+  const _CardBlockWidget({
     super.key,
     required this.fields,
   });
@@ -129,43 +131,34 @@ class _LayoutBlockWidget extends StatelessWidget {
   Widget build(BuildContext context) {
  final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
+      color: Colors.teal,
+      fontSize: 16,
     );
-   return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Text(fields.title!,style: style,
-          semanticsLabel: fields.displayName,
+   return Column(
+    children: [
+      if (fields.displayName != null) 
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(fields.displayName!, style: style,
+            semanticsLabel: fields.image?.fields?.file?.url,
           ),
-      ),
-    );
-  }
-}
-
-class _VideoBlockWidget extends StatelessWidget {
-  const _VideoBlockWidget({
-    super.key,
-    required this.fields,
-  });
-
-  final FieldResponse fields;
-
-  @override
-  Widget build(BuildContext context) {
- final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-   return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Text(fields.video?.fields?.file?.url ?? "",style: style,
-          semanticsLabel: fields.title,
+        ),
+        if (fields.title != null)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(fields.title!, style: style.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+            semanticsLabel: fields.title,
           ),
-      ),
-    );
+        ),
+        if (fields.description != null)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(fields.description!, style: style.copyWith(fontSize: 14),
+            semanticsLabel: fields.description,
+          ),
+        ),
+    ],
+   );
   }
 }
 
@@ -193,6 +186,22 @@ class _SectionBlockWidget extends StatelessWidget {
             semanticsLabel: fields.eyebrowText,
           ),
         ),
+        if (fields.displayTitle != null)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(fields.displayTitle!, style: style.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+            semanticsLabel: fields.displayTitle,
+          ),
+        ),
+        if (fields.innerBlocks != null && fields.innerBlocks!.isNotEmpty)
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: fields.innerBlocks!.length,
+            itemBuilder: (context, index) {
+              return _InnerBlockWidget(block: fields.innerBlocks![index]);
+            },
+          ),
     ],
    );
   }

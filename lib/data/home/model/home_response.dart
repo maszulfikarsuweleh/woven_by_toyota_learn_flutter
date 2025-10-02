@@ -293,6 +293,9 @@ class FieldResponse {
         required this.category,
         required this.topic,
         required this.video,
+        required this.cards,
+        required this.image,
+        required this.innerBlocks,
     });
 
     final String? displayName;
@@ -316,13 +319,27 @@ class FieldResponse {
     final String? publishDate;
     final String? category;
     final List<String>? topic;
-    // @JsonKey(defaultValue: null)
     final Video? video;
+    final List<Card>? cards;
+    final Image? image;
+    final List<InnerBlock>? innerBlocks;
 
     factory FieldResponse.fromJson(Map<String, dynamic> json) => _$FieldResponseFromJson(json);
 
     Map<String, dynamic> toJson() => _$FieldResponseToJson(this);
 
+}
+
+@JsonSerializable()
+class Card {
+  Card({
+    required this.fields
+  });
+
+  final FieldResponse? fields;
+
+  factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
+  Map<String, dynamic> toJson() => _$CardToJson(this);
 }
 
 @JsonSerializable()
@@ -355,7 +372,6 @@ class FileClass {
     factory FileClass.fromJson(Map<String, dynamic> json) => _$FileClassFromJson(json);
 
     Map<String, dynamic> toJson() => _$FileClassToJson(this);
-
 }
 
 @JsonSerializable()
@@ -379,10 +395,12 @@ class Image {
     Image({
         required this.width,
         required this.height,
+        required this.fields,
     });
 
     final int? width;
     final int? height;
+    final FieldResponse? fields;
 
     factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
 

@@ -189,6 +189,15 @@ FieldResponse _$FieldResponseFromJson(Map<String, dynamic> json) =>
       video: json['video'] == null
           ? null
           : Video.fromJson(json['video'] as Map<String, dynamic>),
+      cards: (json['cards'] as List<dynamic>?)
+          ?.map((e) => Card.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      image: json['image'] == null
+          ? null
+          : Image.fromJson(json['image'] as Map<String, dynamic>),
+      innerBlocks: (json['innerBlocks'] as List<dynamic>?)
+          ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
@@ -215,7 +224,20 @@ Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
       'category': instance.category,
       'topic': instance.topic,
       'video': instance.video,
+      'cards': instance.cards,
+      'image': instance.image,
+      'innerBlocks': instance.innerBlocks,
     };
+
+Card _$CardFromJson(Map<String, dynamic> json) => Card(
+  fields: json['fields'] == null
+      ? null
+      : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$CardToJson(Card instance) => <String, dynamic>{
+  'fields': instance.fields,
+};
 
 Video _$VideoFromJson(Map<String, dynamic> json) => Video(
   fields: json['fields'] == null
@@ -258,9 +280,13 @@ Map<String, dynamic> _$DetailsToJson(Details instance) => <String, dynamic>{
 Image _$ImageFromJson(Map<String, dynamic> json) => Image(
   width: (json['width'] as num?)?.toInt(),
   height: (json['height'] as num?)?.toInt(),
+  fields: json['fields'] == null
+      ? null
+      : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$ImageToJson(Image instance) => <String, dynamic>{
   'width': instance.width,
   'height': instance.height,
+  'fields': instance.fields,
 };
