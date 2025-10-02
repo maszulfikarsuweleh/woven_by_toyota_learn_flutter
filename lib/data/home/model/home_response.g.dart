@@ -87,7 +87,7 @@ Map<String, dynamic> _$DataFieldsToJson(DataFields instance) =>
     };
 
 InnerBlock _$InnerBlockFromJson(Map<String, dynamic> json) => InnerBlock(
-  fields: InnerBlock._fromFieldsJson(json['fields'] as Map<String, dynamic>?),
+  fields: FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
   contentType: json['contentType'] as String? ?? '',
   id: json['id'] as String? ?? '',
   locale: json['locale'] as String? ?? '',
@@ -95,7 +95,7 @@ InnerBlock _$InnerBlockFromJson(Map<String, dynamic> json) => InnerBlock(
 
 Map<String, dynamic> _$InnerBlockToJson(InnerBlock instance) =>
     <String, dynamic>{
-      'fields': InnerBlock._toFieldsJson(instance.fields),
+      'fields': instance.fields?.toJson(),
       'contentType': instance.contentType,
       'id': instance.id,
       'locale': instance.locale,
@@ -156,3 +156,111 @@ Map<String, dynamic> _$SectionBlockFieldsToJson(SectionBlockFields instance) =>
       'eyebrowText': instance.eyebrowText,
       'innerBlocks': instance.innerBlocks.map((e) => e.toJson()).toList(),
     };
+
+FieldResponse _$FieldResponseFromJson(Map<String, dynamic> json) =>
+    FieldResponse(
+      displayName: json['displayName'] as String?,
+      title: json['title'] as String?,
+      description: json['description'] as String?,
+      file: json['file'] == null
+          ? null
+          : FileClass.fromJson(json['file'] as Map<String, dynamic>),
+      theme: json['theme'] as String?,
+      id: json['id'] as String?,
+      locale: json['locale'] as String?,
+      layout: json['layout'] as String?,
+      colorBackground: (json['colorBackground'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      displayTitle: json['displayTitle'] as String?,
+      displayTitleWidth: json['displayTitleWidth'] as String?,
+      eyebrowText: json['eyebrowText'] as String?,
+      text: json['text'] as String?,
+      linkText: json['linkText'] as String?,
+      linkUrl: json['linkUrl'] as String?,
+      jumpToLink: json['jumpToLink'] as bool?,
+      ariaLabel: json['ariaLabel'] as String?,
+      pageTitle: json['pageTitle'] as String?,
+      publishDate: json['publishDate'] as String?,
+      category: json['category'] as String?,
+      topic: (json['topic'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      video: json['video'] == null
+          ? null
+          : Video.fromJson(json['video'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
+    <String, dynamic>{
+      'displayName': instance.displayName,
+      'title': instance.title,
+      'description': instance.description,
+      'file': instance.file,
+      'theme': instance.theme,
+      'id': instance.id,
+      'locale': instance.locale,
+      'layout': instance.layout,
+      'colorBackground': instance.colorBackground,
+      'displayTitle': instance.displayTitle,
+      'displayTitleWidth': instance.displayTitleWidth,
+      'eyebrowText': instance.eyebrowText,
+      'text': instance.text,
+      'linkText': instance.linkText,
+      'linkUrl': instance.linkUrl,
+      'jumpToLink': instance.jumpToLink,
+      'ariaLabel': instance.ariaLabel,
+      'pageTitle': instance.pageTitle,
+      'publishDate': instance.publishDate,
+      'category': instance.category,
+      'topic': instance.topic,
+      'video': instance.video,
+    };
+
+Video _$VideoFromJson(Map<String, dynamic> json) => Video(
+  fields: json['fields'] == null
+      ? null
+      : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$VideoToJson(Video instance) => <String, dynamic>{
+  'fields': instance.fields,
+};
+
+FileClass _$FileClassFromJson(Map<String, dynamic> json) => FileClass(
+  url: json['url'] as String?,
+  details: json['details'] == null
+      ? null
+      : Details.fromJson(json['details'] as Map<String, dynamic>),
+  fileName: json['fileName'] as String?,
+  contentType: json['contentType'] as String?,
+);
+
+Map<String, dynamic> _$FileClassToJson(FileClass instance) => <String, dynamic>{
+  'url': instance.url,
+  'details': instance.details,
+  'fileName': instance.fileName,
+  'contentType': instance.contentType,
+};
+
+Details _$DetailsFromJson(Map<String, dynamic> json) => Details(
+  size: (json['size'] as num?)?.toInt(),
+  image: json['image'] == null
+      ? null
+      : Image.fromJson(json['image'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$DetailsToJson(Details instance) => <String, dynamic>{
+  'size': instance.size,
+  'image': instance.image,
+};
+
+Image _$ImageFromJson(Map<String, dynamic> json) => Image(
+  width: (json['width'] as num?)?.toInt(),
+  height: (json['height'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$ImageToJson(Image instance) => <String, dynamic>{
+  'width': instance.width,
+  'height': instance.height,
+};

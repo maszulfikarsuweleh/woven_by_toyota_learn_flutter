@@ -71,15 +71,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _currentIndex == 0
-              ? "Home"
-              : _currentIndex == 1
-                  ? "Career"
-                  : "Settings",
-        ),
-      ),
       body: _pages[_currentIndex], // show selected page
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

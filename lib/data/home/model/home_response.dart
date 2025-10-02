@@ -136,8 +136,9 @@ class DataFields {
 
 @JsonSerializable(explicitToJson: true)
 class InnerBlock {
-  @JsonKey(fromJson: _fromFieldsJson, toJson: _toFieldsJson)
-  final Object? fields;
+
+  @JsonKey(fromJson:FieldResponse.fromJson, toJson: null)
+  final FieldResponse? fields;
 
   @JsonKey(defaultValue: "")
   final String contentType;
@@ -265,4 +266,126 @@ class SectionBlockFields {
       _$SectionBlockFieldsFromJson(json);
 
   Map<String, dynamic> toJson() => _$SectionBlockFieldsToJson(this);
+}
+
+@JsonSerializable()
+class FieldResponse {
+    FieldResponse({
+        required this.displayName,
+        required this.title,
+        required this.description,
+        required this.file,
+        required this.theme,
+        required this.id,
+        required this.locale,
+        required this.layout,
+        required this.colorBackground,
+        required this.displayTitle,
+        required this.displayTitleWidth,
+        required this.eyebrowText,
+        required this.text,
+        required this.linkText,
+        required this.linkUrl,
+        required this.jumpToLink,
+        required this.ariaLabel,
+        required this.pageTitle,
+        required this.publishDate,
+        required this.category,
+        required this.topic,
+        required this.video,
+    });
+
+    final String? displayName;
+    final String? title;
+    final String? description;
+    final FileClass? file;
+    final String? theme;
+    final String? id;
+    final String? locale;
+    final String? layout;
+    final List<String>? colorBackground;
+    final String? displayTitle;
+    final String? displayTitleWidth;
+    final String? eyebrowText;
+    final String? text;
+    final String? linkText;
+    final String? linkUrl;
+    final bool? jumpToLink;
+    final String? ariaLabel;
+    final String? pageTitle;
+    final String? publishDate;
+    final String? category;
+    final List<String>? topic;
+    // @JsonKey(defaultValue: null)
+    final Video? video;
+
+    factory FieldResponse.fromJson(Map<String, dynamic> json) => _$FieldResponseFromJson(json);
+
+    Map<String, dynamic> toJson() => _$FieldResponseToJson(this);
+
+}
+
+@JsonSerializable()
+class Video {
+  Video({
+    required this.fields
+  });
+
+  final FieldResponse? fields;
+
+  factory Video.fromJson(Map<String, dynamic> json) => _$VideoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VideoToJson(this);
+}
+
+@JsonSerializable()
+class FileClass {
+    FileClass({
+        required this.url,
+        required this.details,
+        required this.fileName,
+        required this.contentType,
+    });
+
+    final String? url;
+    final Details? details;
+    final String? fileName;
+    final String? contentType;
+
+    factory FileClass.fromJson(Map<String, dynamic> json) => _$FileClassFromJson(json);
+
+    Map<String, dynamic> toJson() => _$FileClassToJson(this);
+
+}
+
+@JsonSerializable()
+class Details {
+    Details({
+        required this.size,
+        required this.image,
+    });
+
+    final int? size;
+    final Image? image;
+
+    factory Details.fromJson(Map<String, dynamic> json) => _$DetailsFromJson(json);
+
+    Map<String, dynamic> toJson() => _$DetailsToJson(this);
+
+}
+
+@JsonSerializable()
+class Image {
+    Image({
+        required this.width,
+        required this.height,
+    });
+
+    final int? width;
+    final int? height;
+
+    factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
+
+    Map<String, dynamic> toJson() => _$ImageToJson(this);
+
 }
