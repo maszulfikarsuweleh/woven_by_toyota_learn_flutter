@@ -166,6 +166,7 @@ class _NewsBlockWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (fields.newsPosts == null || fields.newsPosts!.isEmpty) return const SizedBox.shrink();
     final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+      fontWeight: FontWeight.bold,
           color: Colors.indigo[700],
         );
 
