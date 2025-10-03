@@ -64,23 +64,23 @@ class _AnimatedInnerBlockWidget extends StatelessWidget {
 
     if (fields == null) return const SizedBox.shrink();
 
-    Widget child;
-    switch (block.contentType) {
-      case "hero":
-        child = VideoPlayerScreen(videoUrl: "https:${fields.video?.fields?.file?.url}");
-      // case "textIntro":
-      //   child = _TextIntroWidget(fields: fields);
-      // case "section":
-      //   child = _SectionBlockWidget(fields: fields);
-      // case "cardGrid":
-      //   child = _CardBlockWidget(fields: fields);
-      // case "featuredArticles":
-      //   child = _NewsBlockWidget(fields: fields);
-      default:
-        child = const SizedBox.shrink();
-    }
+    // Widget child;
+    // switch (block.contentType) {
+    //   case "hero":
+    //     child = VideoPlayerScreen(videoUrl: "https:${fields.video?.fields?.file?.url}");
+    //   // case "textIntro":
+    //   //   child = _TextIntroWidget(fields: fields);
+    //   // case "section":
+    //   //   child = _SectionBlockWidget(fields: fields);
+    //   // case "cardGrid":
+    //   //   child = _CardBlockWidget(fields: fields);
+    //   // case "featuredArticles":
+    //   //   child = _NewsBlockWidget(fields: fields);
+    //   default:
+    //     child = const SizedBox.shrink();
+    // }
 
-    // Widget child = const SizedBox.shrink();
+    Widget child = const SizedBox.shrink();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
