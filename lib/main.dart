@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:woven_by_toyota/di/DIContainer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:woven_by_toyota/presentation/career/viewmodel/career_viewmodel.dart';
 import 'package:woven_by_toyota/presentation/home/viewmodel/home_viewmodel.dart';
 import 'package:woven_by_toyota/screens/career/views/career_page.dart';
 import 'package:woven_by_toyota/screens/home/views/home_page.dart';
@@ -24,6 +25,9 @@ void main() {
       providers: [
         ChangeNotifierProvider<HomeViewModel>(
           create: (_) => locator<HomeViewModel>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => locator<CareerViewModel>(),
         ),
       ],
       child: const MyApp(),

@@ -62,7 +62,6 @@ class _AnimatedInnerBlockWidget extends StatelessWidget {
     if (fields == null) return const SizedBox.shrink();
 
     Widget child;
-    print(  "Rendering block of type: ${block.contentType}" );
     switch (block.contentType) {
       case "hero":
         child = VideoPlayerScreen(videoUrl: "https:${fields.video?.fields?.file?.url}");
