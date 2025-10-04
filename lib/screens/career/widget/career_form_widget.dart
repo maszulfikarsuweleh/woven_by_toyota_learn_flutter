@@ -92,40 +92,37 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Search Edit Text (TextField)
-        TextField(
-          controller: _textController,
-          keyboardType: TextInputType.text,
-          decoration: const InputDecoration(
-            labelText: 'Search Text',
-            hintText: 'Enter keyword...',
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.search),
-          ),
-          // KEY CHANGE: This calls the parent's onSearch function on every keystroke.
-          onChanged: widget.onSearch, 
+    return Row(
+  children: [
+    // Search Edit Text (TextField) - Expanded to take remaining space
+    Expanded(
+      child: TextField(
+        controller: _textController,
+        keyboardType: TextInputType.text,
+        decoration: const InputDecoration(
+          labelText: 'Search Text',
+          hintText: 'Enter keyword...',
+          border: OutlineInputBorder(),
+          prefixIcon: Icon(Icons.search),
         ),
-        const SizedBox(height: 20),
-        
-        // Buttons (Only the Filter button remains)
-        Row(
-          children: [
-            Expanded(
-              // Filter Button
-              child: OutlinedButton.icon(
-                onPressed: _handleFilterToggle, // Executes internal handler which calls parent callback
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                icon: Icon(_isFilterApplied ? Icons.filter_alt_off : Icons.filter_alt),
-                label: Text(_isFilterApplied ? 'Remove Filter' : 'Apply Filter'),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+        // KEY CHANGE: This calls the parent's onSearch function on every keystroke.
+        onChanged: widget.onSearch,
+      ),
+    ),
+
+    const SizedBox(width: 20), // Spacing between TextField and Button
+
+    // Filter Button (Wrapped in a direct container instead of an inner Row/Expanded)
+    OutlinedButton.icon(
+      onPressed: _handleFilterToggle, // Executes internal handler which calls parent callback
+      style: OutlinedButton.styleFrom(
+        // Adjust padding for a compact look next to the TextField
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+      ),
+      icon: Icon(_isFilterApplied ? Icons.filter_alt_off : Icons.filter_alt),
+      label: Text(""),
+    ),
+  ],
+);
   }
 }
