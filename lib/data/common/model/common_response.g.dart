@@ -1,19 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_response.dart';
+part of 'common_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-HomeResponse _$HomeResponseFromJson(Map<String, dynamic> json) => HomeResponse(
-  pageProps: PageProps.fromJson(json['pageProps'] as Map<String, dynamic>),
-  contentType: json['contentType'] as String? ?? '',
-  id: json['id'] as String? ?? '',
-  locale: json['locale'] as String? ?? '',
-);
+CommonResponse _$CommonResponseFromJson(Map<String, dynamic> json) =>
+    CommonResponse(
+      pageProps: PageProps.fromJson(json['pageProps'] as Map<String, dynamic>),
+      contentType: json['contentType'] as String? ?? '',
+      id: json['id'] as String? ?? '',
+      locale: json['locale'] as String? ?? '',
+    );
 
-Map<String, dynamic> _$HomeResponseToJson(HomeResponse instance) =>
+Map<String, dynamic> _$CommonResponseToJson(CommonResponse instance) =>
     <String, dynamic>{
       'pageProps': instance.pageProps.toJson(),
       'contentType': instance.contentType,
@@ -56,7 +57,7 @@ Map<String, dynamic> _$HeadToJson(Head instance) => <String, dynamic>{
 };
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
-  fields: DataFields.fromJson(json['fields'] as Map<String, dynamic>),
+  fields: FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
   contentType: json['contentType'] as String? ?? '',
   id: json['id'] as String? ?? '',
   locale: json['locale'] as String? ?? '',
@@ -68,27 +69,6 @@ Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
   'id': instance.id,
   'locale': instance.locale,
 };
-
-DataFields _$DataFieldsFromJson(Map<String, dynamic> json) => DataFields(
-  pageTitle: json['pageTitle'] as String? ?? '',
-  slug: json['slug'] as String? ?? '',
-  innerBlocks:
-      (json['innerBlocks'] as List<dynamic>?)
-          ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      [],
-  joinOurTeam: json['joinOurTeam'] == null
-      ? null
-      : FieldResponse.fromJson(json['joinOurTeam'] as Map<String, dynamic>),
-);
-
-Map<String, dynamic> _$DataFieldsToJson(DataFields instance) =>
-    <String, dynamic>{
-      'pageTitle': instance.pageTitle,
-      'slug': instance.slug,
-      'innerBlocks': instance.innerBlocks.map((e) => e.toJson()).toList(),
-      'joinOurTeam': instance.joinOurTeam?.toJson(),
-    };
 
 InnerBlock _$InnerBlockFromJson(Map<String, dynamic> json) => InnerBlock(
   fields: FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
@@ -118,9 +98,11 @@ FieldResponse _$FieldResponseFromJson(
   id: json['id'] as String?,
   locale: json['locale'] as String?,
   layout: json['layout'] as String?,
-  colorBackground: (json['colorBackground'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  colorBackground:
+      (json['colorBackground'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      [],
   displayTitle: json['displayTitle'] as String?,
   displayTitleWidth: json['displayTitleWidth'] as String?,
   eyebrowText: json['eyebrowText'] as String?,
@@ -132,29 +114,36 @@ FieldResponse _$FieldResponseFromJson(
   pageTitle: json['pageTitle'] as String?,
   publishDate: json['publishDate'] as String?,
   category: json['category'] as String?,
-  topic: (json['topic'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  topic:
+      (json['topic'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
   video: json['video'] == null
       ? null
       : Video.fromJson(json['video'] as Map<String, dynamic>),
-  cards: (json['cards'] as List<dynamic>?)
-      ?.map((e) => Card.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  cards:
+      (json['cards'] as List<dynamic>?)
+          ?.map((e) => Card.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
   image: json['image'] == null
       ? null
       : Image.fromJson(json['image'] as Map<String, dynamic>),
-  innerBlocks: (json['innerBlocks'] as List<dynamic>?)
-      ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  innerBlocks:
+      (json['innerBlocks'] as List<dynamic>?)
+          ?.map((e) => InnerBlock.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
   cta: json['cta'] == null
       ? null
       : Cta.fromJson(json['cta'] as Map<String, dynamic>),
-  cardType: (json['cardType'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  cardType:
+      (json['cardType'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      [],
   heading: json['heading'] as String?,
-  newsPosts: (json['newsPosts'] as List<dynamic>?)
-      ?.map((e) => FieldResponse.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  newsPosts:
+      (json['newsPosts'] as List<dynamic>?)
+          ?.map((e) => FieldResponse.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
   fields: json['fields'] == null
       ? null
       : FieldResponse.fromJson(json['fields'] as Map<String, dynamic>),
@@ -167,10 +156,15 @@ FieldResponse _$FieldResponseFromJson(
   backgroundImage: json['backgroundImage'] == null
       ? null
       : FieldResponse.fromJson(json['backgroundImage'] as Map<String, dynamic>),
+  joinOurTeam: json['joinOurTeam'] == null
+      ? null
+      : FieldResponse.fromJson(json['joinOurTeam'] as Map<String, dynamic>),
+  slug: json['slug'] as String?,
 );
 
 Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
     <String, dynamic>{
+      'slug': instance.slug,
       'backgroundImage': instance.backgroundImage,
       'titleText': instance.titleText,
       'sectionTitle': instance.sectionTitle,
@@ -206,6 +200,7 @@ Map<String, dynamic> _$FieldResponseToJson(FieldResponse instance) =>
       'innerBlocks': instance.innerBlocks,
       'cta': instance.cta,
       'cardType': instance.cardType,
+      'joinOurTeam': instance.joinOurTeam,
     };
 
 Thumbnail _$ThumbnailFromJson(Map<String, dynamic> json) => Thumbnail(

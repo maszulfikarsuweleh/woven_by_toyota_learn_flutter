@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import '../../../data/home/repository/home_repository.dart';
-import '../../../data/home/model/home_response.dart';
+import '../../../data/common/model/common_response.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final HomeRepository repository;
   HomeViewModel(this.repository);
 
-  HomeResponse? _homeResponse;
+  CommonResponse? _homeResponse;
   bool _isLoading = false;
 
-  HomeResponse? get homeResponse => _homeResponse;
+  CommonResponse? get homeResponse => _homeResponse;
   bool get isLoading => _isLoading;
 
   Future<void> loadHomeData() async {

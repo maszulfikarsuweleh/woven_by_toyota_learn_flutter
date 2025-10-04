@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'home_response.g.dart';
+part 'common_response.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class HomeResponse {
+class CommonResponse {
   final PageProps pageProps;
 
   @JsonKey(defaultValue: "")
@@ -15,17 +15,17 @@ class HomeResponse {
   @JsonKey(defaultValue: "")
   final String locale;
 
-  HomeResponse({
+  CommonResponse({
     required this.pageProps,
     required this.contentType,
     required this.id,
     required this.locale,
   });
 
-  factory HomeResponse.fromJson(Map<String, dynamic> json) =>
-      _$HomeResponseFromJson(json);
+  factory CommonResponse.fromJson(Map<String, dynamic> json) =>
+      _$CommonResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$HomeResponseToJson(this);
+  Map<String, dynamic> toJson() => _$CommonResponseToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -88,7 +88,7 @@ class Head {
 
 @JsonSerializable(explicitToJson: true)
 class Data {
-  final DataFields fields;
+  final FieldResponse fields;
 
   @JsonKey(defaultValue: "")
   final String contentType;
@@ -109,32 +109,6 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class DataFields {
-  @JsonKey(defaultValue: "")
-  final String pageTitle;
-
-  @JsonKey(defaultValue: "")
-  final String slug;
-
-  @JsonKey(defaultValue: [])
-  final List<InnerBlock> innerBlocks;
-
-  final FieldResponse? joinOurTeam;
-
-  DataFields({
-    required this.pageTitle,
-    required this.slug,
-    required this.innerBlocks,
-    required this.joinOurTeam,
-  });
-
-  factory DataFields.fromJson(Map<String, dynamic> json) =>
-      _$DataFieldsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DataFieldsToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -203,14 +177,18 @@ class FieldResponse {
         required this.sectionTitle,
         required this.titleText,
         required this.backgroundImage,
+        required this.joinOurTeam,
+        required this.slug,
     });
 
+    final String? slug;
     final FieldResponse? backgroundImage;
     final String? titleText;
     final String? sectionTitle;
     final String? name;
     final Thumbnail? thumbnail;
     final FieldResponse? fields;
+    @JsonKey(defaultValue: [])
     final List<FieldResponse>? newsPosts;
     final String? heading;
     final String? displayName;
@@ -221,6 +199,7 @@ class FieldResponse {
     final String? id;
     final String? locale;
     final String? layout;
+    @JsonKey(defaultValue: [])
     final List<String>? colorBackground;
     final String? displayTitle;
     final String? displayTitleWidth;
@@ -233,13 +212,18 @@ class FieldResponse {
     final String? pageTitle;
     final String? publishDate;
     final String? category;
+    @JsonKey(defaultValue: [])
     final List<String>? topic;
     final Video? video;
+    @JsonKey(defaultValue: [])
     final List<Card>? cards;
     final Image? image;
+    @JsonKey(defaultValue: [])
     final List<InnerBlock>? innerBlocks;
     final Cta? cta;
+    @JsonKey(defaultValue: [])
     final List<String>? cardType;
+    final FieldResponse? joinOurTeam;
 
     factory FieldResponse.fromJson(Map<String, dynamic> json) => _$FieldResponseFromJson(json);
 

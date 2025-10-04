@@ -2,24 +2,43 @@ import 'package:dio/dio.dart';
 import 'package:woven_by_toyota/core/network/constants.dart';
 
 class DioClient {
-  final Dio _dio;
+  late final Dio dioWovenApi;
+  late final Dio dioLeverApi;
 
-  DioClient()
-      : _dio = Dio(
-          BaseOptions(
-            baseUrl: ApiConstants.baseUrl,
-            connectTimeout: const Duration(seconds: 10),
-            receiveTimeout: const Duration(seconds: 10),
-            responseType: ResponseType.json,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          ),
-        ) {
-    _dio.interceptors.addAll([
-      LogInterceptor(responseBody: true),
-    ]);
+  DioClient() {
+    dioWovenApi = _createWovenApi();
+    dioLeverApi = _createLeverApi();
   }
 
-  Dio get dio => _dio;
+  Dio _createWovenApi() {
+    return Dio(
+      BaseOptions(
+        baseUrl: ApiConstants.baseUrl,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+        responseType: ResponseType.json,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      ),
+    )..interceptors.addAll([
+        LogInterceptor(responseBody: true),
+      ]);
+  }
+
+  Dio _createLeverApi() {
+    return Dio(
+      BaseOptions(
+        baseUrl: ApiConstants.leverBaseUrl,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+        responseType: ResponseType.json,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      ),
+    )..interceptors.addAll([
+        LogInterceptor(responseBody: true),
+      ]);
+  }
 }

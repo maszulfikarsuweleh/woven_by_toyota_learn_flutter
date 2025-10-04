@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woven_by_toyota/components/text/eyebrow_text.dart';
+import 'package:woven_by_toyota/components/text/title_text.dart';
 import 'package:woven_by_toyota/components/video_player/video_player.dart';
-import 'package:woven_by_toyota/data/home/model/home_response.dart' hide Image, Card;
+import 'package:woven_by_toyota/data/common/model/common_response.dart' hide Image, Card;
 import 'package:woven_by_toyota/presentation/home/viewmodel/home_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -309,21 +311,17 @@ class _SectionBlockWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
-          fontWeight: FontWeight.bold,
-          color: Colors.indigo[700],
-        );
-    final subtitleStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.redAccent);
 
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (fields.eyebrowText != null) Text(fields.eyebrowText!, style: subtitleStyle),
+          if (fields.eyebrowText != null) 
+            EyebrowText(text: fields.eyebrowText!),
           if (fields.displayTitle != null) ...[
             const SizedBox(height: 4),
-            Text(fields.displayTitle!, style: titleStyle),
+            TitleText(text: fields.displayTitle!),
           ],
           if (fields.innerBlocks != null && fields.innerBlocks!.isNotEmpty)
             ...fields.innerBlocks!.map((block) => Padding(
