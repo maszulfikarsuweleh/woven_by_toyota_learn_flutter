@@ -287,9 +287,11 @@ class FluffyFields {
         required this.elementClass,
         required this.cards,
         required this.cardType,
+        required this.eyebrowText
     });
 
     final String? eyebrow;
+    final String? eyebrowText;
     final String? header;
     final String? layout;
     final String? displayName;

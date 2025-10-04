@@ -273,11 +273,13 @@ FluffyFields _$FluffyFieldsFromJson(Map<String, dynamic> json) => FluffyFields(
   cardType: (json['cardType'] as List<dynamic>?)
       ?.map((e) => e as String)
       .toList(),
+  eyebrowText: json['eyebrowText'] as String?,
 );
 
 Map<String, dynamic> _$FluffyFieldsToJson(FluffyFields instance) =>
     <String, dynamic>{
       'eyebrow': instance.eyebrow,
+      'eyebrowText': instance.eyebrowText,
       'header': instance.header,
       'layout': instance.layout,
       'displayName': instance.displayName,

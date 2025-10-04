@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 
-class TextOverImage extends StatelessWidget {
-  
-  const TextOverImage({
-    super.key,
-    required this.url,
-    required this.textContent,
-  });
+class ImageHeroWidget extends StatelessWidget {
+  final String? url;
+  final String? text;
 
-  final String url;
-  final String textContent;
+  const ImageHeroWidget({super.key, required this.url, this.text = ""});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        // Background image
-        ClipRRect(
+    if (url == null) return const SizedBox.shrink();
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                      ClipRRect(
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                         child: Image.network(
-                          url,
+                          "https:$url",
                         fit: BoxFit.cover,
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
@@ -37,19 +39,10 @@ class TextOverImage extends StatelessWidget {
                           errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, size: 50), 
                         ),
                       ),
-        // Text positioned at the bottom left
-        Positioned(
-          bottom: 10,
-          left: 10,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.black54,
-            child: Text(textContent,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ],
+                  ],
+                ),
+              )
+        ]       
     );
   }
-}
+ }

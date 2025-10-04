@@ -29,9 +29,10 @@ class AccordionWidget extends StatelessWidget {
 
 class AccordionDataItem {
   final String header;
+  final String? subheader;
   final List<String> content;
 
-  AccordionDataItem({required this.header, required this.content});
+  AccordionDataItem({required this.header, this.subheader, required this.content});
 }
 
 class _AccordionTile extends StatelessWidget {

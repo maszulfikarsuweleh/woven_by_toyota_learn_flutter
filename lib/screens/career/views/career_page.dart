@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woven_by_toyota/components/container/accordion_widget.dart';
 import 'package:woven_by_toyota/components/container/glass_view_accordion_widget.dart';
-import 'package:woven_by_toyota/components/image/text_over_image.dart';
-import 'package:woven_by_toyota/data/career/model/career_response.dart' hide Image, Card;
-import 'package:woven_by_toyota/data/career/model/open_vacancy_response.dart';
 import 'package:woven_by_toyota/presentation/career/viewmodel/career_viewmodel.dart';
 import 'package:woven_by_toyota/screens/career/widget/animatted_inner_block_widget.dart';
 
@@ -54,10 +51,17 @@ late CareerViewModel _viewModel;
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: innerBlocks.length, // A manageable number of items.
-              itemBuilder: (context, index) => AnimatedInnerBlockWidget(block: innerBlocks[index]),
+              itemBuilder: (context, index) => AnimatedInnerBlockWidget(
+                block: innerBlocks[index],
+                jobPostings: jobListings,
+                onSearch: (term) {
+                  _viewModel.searchCareer(term);
+                },
+                onFilterToggle: (isActive) {
+                  _viewModel.toggleFilter(isActive);
+                },
+              ),
             ),
-            GlassAccordionWidget(accordionData: jobListings?.map((job) => AccordionDataItem(header: job.title, content: job.jobItems.map((item) => item.text).toList())).toList() ?? [
-        ])
     ]));
   }
 }

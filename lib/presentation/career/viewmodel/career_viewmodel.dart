@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:woven_by_toyota/data/career/model/career_response.dart';
-import 'package:woven_by_toyota/data/career/model/open_vacancy_response.dart';
 import 'package:woven_by_toyota/data/career/repository/career_repository.dart';
 import 'package:woven_by_toyota/domain/career/get_get_group_career_position_use_case.dart';
 import 'package:woven_by_toyota/model/career/job_posting_model.dart';
@@ -46,4 +45,8 @@ class CareerViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  void searchCareer(String term) {}
+
+  void toggleFilter(bool isActive) {}
 }

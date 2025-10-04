@@ -81,7 +81,7 @@ class _GlassAccordionTile extends StatelessWidget {
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
               // Styling the header
-              tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               
               title: Text(
                 content.header,
@@ -91,7 +91,14 @@ class _GlassAccordionTile extends StatelessWidget {
                   color: Colors.indigo, // White text for dark background
                 ),
               ),
-
+              subtitle: content.subheader != null ? Text(
+                content.subheader!,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.indigo, // White text for dark background
+                ),
+              ) : null,
               // Customizing the trailing icon
               trailing: const Icon(
                 Icons.keyboard_arrow_down,
@@ -101,7 +108,7 @@ class _GlassAccordionTile extends StatelessWidget {
               // The content that expands/collapses
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 0),
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: content.content
